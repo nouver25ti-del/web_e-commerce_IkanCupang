@@ -1,59 +1,128 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# 🐟 Toko Cupang
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Website e-commerce sederhana untuk menjual ikan cupang hias (plakat, halfmoon, crowntail, giant, dan double tail). Dibangun dengan **Laravel 12**, dengan pemisahan yang jelas antara sisi **pelanggan** dan sisi **admin**.
 
-## About Laravel
+## Fitur
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+### Pelanggan (customer)
+- Melihat katalog cupang lengkap dengan foto, harga, jenis, warna, dan stok.
+- Mencari cupang berdasarkan nama atau kode, serta memfilter berdasarkan jenis.
+- Mendaftar akun dan login.
+- Menambahkan cupang ke keranjang (dibatasi oleh stok yang tersedia).
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+### Admin
+- Login lewat halaman khusus admin.
+- Dashboard ringkasan: jumlah produk, total stok, dan jumlah produk yang habis.
+- Tambah, ubah, dan hapus data cupang (kode, nama, jenis, warna, harga, stok).
+- Unggah, ganti, atau hapus foto cupang (JPG, PNG, WebP, maksimal 2 MB).
+- Mencari produk berdasarkan nama atau kode.
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+### Keamanan
+- Halaman login pelanggan dan admin dipisah, dibedakan oleh kolom `role` pada tabel `users`.
+- Akun admin tidak bisa masuk lewat login pelanggan, dan sebaliknya.
+- Pendaftaran publik selalu menghasilkan akun pelanggan. Akun admin hanya dibuat lewat seeder.
+- Area `/admin` hanya bisa diakses oleh role `admin`.
+- Login dibatasi 5 kali percobaan gagal.
 
-## Learning Laravel
+## Teknologi
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework. You can also check out [Laravel Learn](https://laravel.com/learn), where you will be guided through building a modern Laravel application.
+| Bagian | Yang dipakai |
+|---|---|
+| Framework | Laravel 12 (PHP 8.2+) |
+| Database | MySQL |
+| Tampilan | Blade dan CSS kustom (`public/css/toko.css`) |
+| Sesi | Database session |
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+## Halaman dan rute
 
-## Laravel Sponsors
+| Alamat | Keterangan | Akses |
+|---|---|---|
+| `/` | Katalog toko | Semua |
+| `/login` | Login pelanggan | Tamu |
+| `/register` | Daftar pelanggan | Tamu |
+| `/admin/login` | Login admin | Tamu |
+| `/admin/cupang` | Daftar dan kelola produk | Admin |
+| `/admin/cupang/create` | Tambah produk | Admin |
+| `/admin/cupang/{id}/edit` | Ubah produk | Admin |
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+## Cara menjalankan
 
-### Premium Partners
+Pastikan sudah terpasang PHP 8.2 atau lebih baru, Composer, dan MySQL. Bisa memakai Laragon atau XAMPP.
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+```bash
+# 1. Clone repositori
+git clone https://github.com/<username>/web_e-commerce_IkanCupang.git
+cd web_e-commerce_IkanCupang
 
-## Contributing
+# 2. Pasang dependensi
+composer install
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+# 3. Salin file environment lalu buat app key
+cp .env.example .env
+php artisan key:generate
+```
 
-## Code of Conduct
+Buka file `.env`, lalu sesuaikan koneksi database:
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+```env
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=toko_cupang
+DB_USERNAME=root
+DB_PASSWORD=
+```
 
-## Security Vulnerabilities
+Buat database `toko_cupang` di MySQL, lalu jalankan:
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+```bash
+# 4. Buat tabel dan isi data awal
+php artisan migrate --seed
 
-## License
+# 5. Jalankan server
+php artisan serve
+```
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+Buka `http://127.0.0.1:8000` di browser.
+
+## Akun demo
+
+Dibuat otomatis oleh `UserSeeder`.
+
+| Peran | Email | Kata sandi | Halaman login |
+|---|---|---|---|
+| Admin | `admin@tokocupang.test` | `admin12345` | `/admin/login` |
+| Pelanggan | `pelanggan@tokocupang.test` | `pelanggan123` | `/login` |
+
+> ⚠️ Segera ganti kata sandi ini di `database/seeders/UserSeeder.php` sebelum website dipasang di server sungguhan.
+
+## Struktur penting
+
+```
+app/
+├── Http/
+│   ├── Controllers/
+│   │   ├── AuthController.php          # login, daftar, logout
+│   │   ├── CupangController.php        # katalog dan keranjang (pelanggan)
+│   │   └── Admin/CupangController.php  # kelola produk (admin)
+│   └── Middleware/EnsureRole.php       # pembatas akses berdasarkan role
+└── Models/
+    ├── Cupang.php
+    └── User.php
+resources/views/
+├── auth/        # login pelanggan, login admin, daftar
+├── admin/       # panel kelola produk
+├── cupang/      # katalog toko
+└── layouts/     # layout toko dan layout admin
+routes/web.php   # semua rute
+```
+
+## Catatan
+
+- Foto produk disimpan di `public/uploads/cupang/`.
+- Keranjang disimpan di session, sehingga hilang saat pengguna logout. Fitur checkout dan riwayat pesanan belum tersedia.
+- Jangan unggah file `.env` ke repositori publik.
+
+## Lisensi
+
+Proyek ini dibuat untuk keperluan pembelajaran. Framework Laravel berlisensi [MIT](https://opensource.org/licenses/MIT).
