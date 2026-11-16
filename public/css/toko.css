@@ -79,3 +79,55 @@ label{display:block;font-size:.8rem;color:var(--muted);margin:10px 0 4px}
 .formpage label{margin-top:14px}
 .formpage .err{margin:4px 0 0}
 .tools button{padding:11px 18px}
+.pic.has-foto{padding:0}
+.pic .foto{width:100%;height:170px;object-fit:cover;display:block}
+.preview{display:block;width:100%;max-height:200px;object-fit:cover;border:1px solid var(--line);margin-bottom:10px}
+.preview[hidden]{display:none}
+.formpage input[type=file]{padding:9px}
+.hint{color:var(--muted);font-size:.8rem;margin:6px 0 0}
+.cek{display:flex;gap:8px;align-items:center;color:var(--ink);font-size:.9rem}
+.cek input{width:auto}
+
+/* ===== Login / pelanggan / admin ===== */
+.nav .who{font-size:.72rem;letter-spacing:.06em;color:var(--muted)}
+.nav .navform{margin:0}
+.eyebrow.tag{display:inline-block;margin-top:18px;text-decoration:none;border:1px solid var(--lime);padding:3px 10px;border-radius:999px}
+.formpage .eyebrow.tag+h1{margin-top:12px}
+.authlinks{margin:22px 0 0;color:var(--muted);font-size:.92rem}
+.authlinks a{color:var(--lime);text-decoration:underline;text-underline-offset:3px}
+.authlinks.small{margin-top:8px;font-size:.8rem}
+.act>.btn.full{flex:1;width:100%;padding:8px 10px;font-size:.84rem}
+@media (max-width:720px){
+ .nav a.keep{display:inline-flex}
+ .nav .who{display:none}
+ .nav{flex-wrap:wrap;gap:12px}
+}
+
+/* Panel admin */
+.topbar{display:flex;align-items:center;gap:20px;flex-wrap:wrap;padding:calc(14px + env(safe-area-inset-top,0px)) 24px 14px;border-bottom:1px solid var(--line);background:var(--bg2)}
+.topbar .logo{font-family:Caveat,cursive;font-size:1.7rem;margin-right:auto}
+.topbar .logo small{font-family:Inter,sans-serif;font-size:.62rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;background:var(--lime);color:var(--lime-ink);padding:2px 7px;border-radius:2px;margin-left:6px;vertical-align:middle}
+.topbar nav{display:flex;align-items:center;gap:18px}
+.topbar nav a,.topbar .lnk{font-size:.8rem}
+.topbar .who{color:var(--muted);font-size:.8rem}
+.topbar form{margin:0}
+.topbar .lnk{background:none;border:0;padding:0;font-weight:600;color:var(--ink)}
+.admin{max-width:1060px;margin:0 auto;padding:36px 20px 60px}
+.admin h1{font-size:clamp(1.6rem,4vw,2.2rem);margin:0;max-width:none}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:24px 0 4px}
+.stats div{background:var(--glass);border:1px solid var(--line);padding:14px 16px;display:flex;flex-direction:column;gap:2px}
+.stats b{font-size:1.6rem;color:var(--lime)}
+.stats span{color:var(--muted);font-size:.8rem}
+.tblwrap{overflow-x:auto;margin-top:8px;border:1px solid var(--line)}
+.tbl{width:100%;border-collapse:collapse;font-size:.9rem;min-width:760px}
+.tbl th,.tbl td{padding:10px 12px;text-align:left;border-bottom:1px solid var(--line);vertical-align:middle}
+.tbl th{font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);background:var(--glass)}
+.tbl .num{text-align:right;white-space:nowrap}
+.tbl .thumb{width:72px}
+.tbl .thumb svg{width:56px;height:36px;display:block}
+.tbl .thumb img{width:56px;height:40px;object-fit:cover;display:block}
+.tbl .out{color:var(--danger);font-weight:600}
+.tbl .aksi{display:flex;gap:6px;justify-content:flex-end}
+.tbl .aksi form{margin:0}
+.tbl .aksi .btn,.tbl .aksi button{padding:6px 12px;font-size:.8rem}
+.tbl .empty{text-align:center;color:var(--muted);padding:30px 10px}

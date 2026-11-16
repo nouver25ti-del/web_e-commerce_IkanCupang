@@ -20,5 +20,5 @@ class Cupang extends Model
 
     protected $table = 'cupangs';
 
-    protected $fillable = ['kode', 'nama', 'jenis', 'warna', 'harga', 'stok'];
+    protected $fillable = ['kode', 'nama', 'jenis', 'warna', 'harga', 'stok', 'gambar'];
 }

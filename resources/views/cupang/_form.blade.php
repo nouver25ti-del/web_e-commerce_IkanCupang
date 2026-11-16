@@ -37,3 +37,19 @@
     @error('stok')<p class="err">{{ $message }}</p>@enderror
   </div>
 </div>
+
+<label for="gambar">Foto cupang</label>
+<img class="preview" id="preview" alt="Pratinjau foto" @if ($cupang->gambar) src="{{ asset('uploads/cupang/'.$cupang->gambar) }}" @else hidden @endif>
+<input id="gambar" name="gambar" type="file" accept="image/png,image/jpeg,image/webp">
+<p class="hint">JPG, PNG, atau WebP, maksimal 2 MB. Kosongkan untuk memakai gambar bawaan.</p>
+@error('gambar')<p class="err">{{ $message }}</p>@enderror
+@if ($cupang->gambar)
+  <label class="cek"><input type="checkbox" name="hapus_gambar" value="1"> Hapus foto ini</label>
+@endif
+<script>
+document.getElementById('gambar').addEventListener('change', function () {
+  var img = document.getElementById('preview'), f = this.files[0];
+  if (!f) return;
+  img.src = URL.createObjectURL(f); img.hidden = false;
+});
+</script>

@@ -8,7 +8,27 @@
   <nav class="nav" aria-label="Menu utama">
     <span class="logo">Toko Cupang</span>
     <a href="#produk">Produk</a><a href="#kontak">Tentang</a><a href="#kontak">Kontak</a>
-    <a class="cart" href="#produk" aria-label="Keranjang: {{ $jumlahKeranjang }} item"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M5 8h14l1 13H4zM8 8a4 4 0 018 0" stroke="currentColor" stroke-width="2" fill-opacity=".9"/></svg><b>{{ $jumlahKeranjang }}</b></a>
+
+    @guest
+      <a class="keep" href="{{ route('login') }}">Masuk</a>
+      <a class="keep" href="{{ route('register') }}">Daftar</a>
+    @endguest
+
+    @auth
+      @if (auth()->user()->isAdmin())
+        <a class="keep" href="{{ route('admin.cupang.index') }}">Panel Admin</a>
+      @else
+        <span class="who">Halo, {{ \Illuminate\Support\Str::before(auth()->user()->name, ' ') }}</span>
+      @endif
+      <form class="navform" method="POST" action="{{ route('logout') }}">
+        @csrf
+        <button class="lnk">Keluar</button>
+      </form>
+    @endauth
+
+    @if (! auth()->user()?->isAdmin())
+      <a class="cart" href="#produk" aria-label="Keranjang: {{ $jumlahKeranjang }} item"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M5 8h14l1 13H4zM8 8a4 4 0 018 0" stroke="currentColor" stroke-width="2" fill-opacity=".9"/></svg><b>{{ $jumlahKeranjang }}</b></a>
+    @endif
   </nav>
   <div class="copy">
     <span class="eyebrow">Spesialis cupang hias</span>
@@ -20,8 +40,7 @@
 
 <section id="produk">
   <div class="head">
-    <div><h2>Cupang pilihan</h2><p>Kelola stok, harga, dan warna langsung dari sini.</p></div>
-    <a class="btn lime" href="{{ route('cupang.create') }}">+ Tambah cupang</a>
+    <div><h2>Cupang pilihan</h2><p>Pilih cupang favoritmu, stok selalu diperbarui.</p></div>
   </div>
 
   <form class="tools" method="GET" action="{{ route('cupang.index') }}#produk">
@@ -40,30 +59,35 @@
   <div class="grid">
     @forelse ($cupangs as $c)
       <article class="item">
-        <div class="pic">
+        <div class="pic {{ $c->gambar ? 'has-foto' : '' }}">
           <span class="badge {{ $c->stok > 0 ? '' : 'out' }}">{{ $c->stok > 0 ? 'Stok '.$c->stok : 'Habis' }}</span>
-          @include('cupang._ikan', ['warna' => $c->warna, 'id' => $c->id])
+          @if ($c->gambar)
+            <img class="foto" src="{{ asset('uploads/cupang/'.$c->gambar) }}" alt="{{ $c->nama }}" loading="lazy">
+          @else
+            @include('cupang._ikan', ['warna' => $c->warna, 'id' => $c->id])
+          @endif
         </div>
         <div class="info">
           <h3>{{ $c->nama }}</h3>
           <span class="sub">{{ $c->kode }} · {{ $c->jenis }} · {{ $c->warna }}</span>
           <span class="price">Rp {{ number_format($c->harga, 0, ',', '.') }}</span>
-          <div class="act">
-            <form class="buy" method="POST" action="{{ route('cupang.beli', $c) }}">
-              @csrf
-              <button class="lime" @disabled($c->stok < 1)>Beli</button>
-            </form>
-            <a class="btn" href="{{ route('cupang.edit', $c) }}">Edit</a>
-            <form method="POST" action="{{ route('cupang.destroy', $c) }}" onsubmit="return confirm('Hapus cupang ini?')">
-              @csrf
-              @method('DELETE')
-              <button>Hapus</button>
-            </form>
-          </div>
+
+          @if (! auth()->user()?->isAdmin())
+            <div class="act">
+              @auth
+                <form class="buy" method="POST" action="{{ route('cupang.beli', $c) }}">
+                  @csrf
+                  <button class="lime" @disabled($c->stok < 1)>Beli</button>
+                </form>
+              @else
+                <a class="btn lime full" href="{{ route('login') }}">Masuk untuk beli</a>
+              @endauth
+            </div>
+          @endif
         </div>
       </article>
     @empty
-      <p class="empty">Belum ada cupang yang cocok. Tambahkan cupang baru untuk mulai.</p>
+      <p class="empty">Belum ada cupang yang cocok dengan pencarianmu.</p>
     @endforelse
   </div>
 </section>

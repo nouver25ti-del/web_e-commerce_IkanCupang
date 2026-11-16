@@ -13,8 +13,12 @@ class User extends Authenticatable
     /** @use HasFactory<UserFactory> */
     use HasFactory, Notifiable;
 
+    public const ROLE_ADMIN = 'admin';
+    public const ROLE_CUSTOMER = 'customer';
+
     /**
-     * The attributes that are mass assignable.
+     * 'role' sengaja TIDAK ada di $fillable supaya tidak bisa diisi dari
+     * form (mencegah pembeli mendaftar sebagai admin).
      *
      * @var list<string>
      */
@@ -25,8 +29,6 @@ class User extends Authenticatable
     ];
 
     /**
-     * The attributes that should be hidden for serialization.
-     *
      * @var list<string>
      */
     protected $hidden = [
@@ -35,8 +37,6 @@ class User extends Authenticatable
     ];
 
     /**
-     * Get the attributes that should be cast.
-     *
      * @return array<string, string>
      */
     protected function casts(): array
@@ -45,5 +45,16 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    public function isAdmin(): bool
+    {
+        return $this->role === self::ROLE_ADMIN;
+    }
+
+    /** Halaman utama sesuai peran: admin ke panel, pelanggan ke toko. */
+    public function homeUrl(): string
+    {
+        return $this->isAdmin() ? route('admin.cupang.index') : route('cupang.index');
     }
 }
